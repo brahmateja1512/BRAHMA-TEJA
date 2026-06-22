@@ -3,7 +3,7 @@
    Handles Auth, Navigation, and REST API CRUD Operations
 */
 
-const API_BASE = 'http://127.0.0.1:8080/api';
+const API_BASE = '/api';
 let authToken = localStorage.getItem('admin_token');
 
 // Global arrays to hold data for editing
