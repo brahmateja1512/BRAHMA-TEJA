@@ -3,7 +3,7 @@
    Handles Auth, Navigation, and REST API CRUD Operations
 */
 
-const API_BASE = '/api';
+const API_BASE = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.protocol === 'file:') ? 'http://localhost:8000/api' : '/api';
 let authToken = localStorage.getItem('admin_token');
 
 // Global arrays to hold data for editing

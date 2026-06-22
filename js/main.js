@@ -3,7 +3,7 @@
    Main Frontend Logic - Dynamic Data & GSAP Motion
 */
 
-const API_BASE = '/api';
+const API_BASE = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.protocol === 'file:') ? 'http://localhost:8000/api' : '/api';
 
 document.addEventListener('DOMContentLoaded', async () => {
     lucide.createIcons();
