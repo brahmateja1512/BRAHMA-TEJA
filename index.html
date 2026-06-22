@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="dyn-page-title">Loading... | System Online</title>
+    <meta name="description" content="Professional Portfolio - Robotics & Automation Engineer">
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <!-- GSAP for Motion Graphics -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/TextPlugin.min.js"></script>
+    
+    <!-- Google Fonts: JetBrains Mono and Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="css/style.css?v=2">
+</head>
+<body class="cyber-theme loading">
+
+    <!-- Preloader -->
+    <div id="preloader" class="preloader">
+        <div class="preloader-content">
+            <i data-lucide="cpu" class="spin-slow neon-blue" style="width: 48px; height: 48px;"></i>
+            <div class="loading-text mono">INITIALIZING CORE SYSTEMS...</div>
+            <div class="progress-bar"><div class="progress" id="loading-progress"></div></div>
+        </div>
+    </div>
+
+    <!-- Ambient animated background -->
+    <canvas id="canvas-bg"></canvas>
+
+    <!-- Custom Cursor -->
+    <div class="custom-cursor" id="cursor"></div>
+
+    <!-- Minimalist High-Tech Navigation -->
+    <nav class="main-nav">
+        <a href="#home" class="nav-brand mono" id="dyn-nav-brand">SYS.BOOT</a>
+        <div class="nav-links mono">
+            <a href="#about" class="nav-link">IDENT</a>
+            <a href="#portfolio" class="nav-link">MODULES</a>
+            <a href="#experience" class="nav-link">LOGS</a>
+            <a href="#contact" class="nav-link">UPLINK</a>
+        </div>
+    </nav>
+
+    <!-- Immersive Hero Section -->
+    <section id="home" class="hero-section">
+        <div class="container gs-reveal">
+            <div class="hero-content">
+                <div class="system-status">
+                    <span class="status-dot blink"></span>
+                    <span class="status-text mono">SYSTEM.ONLINE // VER: 5.0.0</span>
+                </div>
+                <h1 class="hero-title" id="dyn-hero-title"></h1>
+                <h2 class="hero-subtitle mono neon-orange" id="dyn-hero-subtitle"></h2>
+                
+                <div class="hero-actions">
+                    <a href="#portfolio" class="cyber-btn primary">
+                        <span id="dyn-hero-action">INITIALIZE</span>
+                        <i data-lucide="arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="hero-visual" id="dyn-hero-visual">
+                <!-- Can load profile image or 3D graphic here dynamically -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Infinite Ticker Tape -->
+    <div class="ticker-wrapper gs-reveal">
+        <div class="ticker-track" id="dynamic-skills-ticker">
+            <!-- Dynamically populated -->
+        </div>
+    </div>
+
+    <!-- About Section -->
+    <section id="about" class="section-padding">
+        <div class="container grid-2">
+            <div class="gs-reveal-left">
+                <h2 class="section-title mono">00. IDENT</h2>
+                <div class="about-card glitch-container">
+                    <img id="dyn-profile-img" src="" alt="Profile Image" class="profile-img hidden">
+                    <div class="glitch-overlay"></div>
+                </div>
+            </div>
+            <div class="gs-reveal-right about-text-container">
+                <h3 class="mono neon-blue" id="dyn-ident-name"></h3>
+                <h4 class="mono text-muted" id="dyn-ident-title"></h4>
+                <p class="text-lg" id="dyn-about-text"></p>
+                <a id="dyn-resume-link" href="#" target="_blank" class="cyber-btn secondary hidden" style="margin-top: 2rem; display: inline-flex;">
+                    <i data-lucide="download"></i> EXTRACT_DATA (CV)
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Modules -->
+    <section id="portfolio" class="section-padding border-top">
+        <div class="container">
+            <div class="gs-reveal-up section-header">
+                <h2 class="section-title mono">01. DEPLOYED_MODULES</h2>
+                <p class="text-lg text-muted">Curated automated systems and engineering projects.</p>
+            </div>
+            <div id="cms-projects" class="projects-grid">
+                <div class="loading-state">
+                    <i data-lucide="loader" class="spin"></i>
+                    <span>Syncing Deployments...</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Timeline: Experience & Education -->
+    <section id="experience" class="section-padding border-top">
+        <div class="container">
+            <div class="logs-grid">
+                <!-- Experience Column -->
+                <div class="timeline-col gs-reveal-up">
+                    <h2 class="section-title mono">02. CAREER_LOGS</h2>
+                    <div id="cms-experience" class="timeline">
+                        <div class="loading-state">
+                            <i data-lucide="loader" class="spin"></i>
+                            <span>Fetching Records...</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Education Column -->
+                <div class="timeline-col gs-reveal-up" style="transition-delay: 0.2s;">
+                    <h2 class="section-title mono">// ACADEMIC_LOGS</h2>
+                    <div id="cms-education" class="timeline">
+                        <div class="loading-state">
+                            <i data-lucide="loader" class="spin"></i>
+                            <span>Fetching Records...</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="footer-contact border-top">
+        <div class="container">
+            <div class="gs-reveal-up contact-grid">
+                <div>
+                    <h2 class="hero-title neon-orange">INITIATE_LINK.</h2>
+                    <p class="mono text-muted mt-2" id="dyn-contact-location"></p>
+                </div>
+                <div class="contact-links" id="dyn-social-links">
+                    <a id="dyn-contact-email" href="" class="contact-link"><i data-lucide="mail"></i> EMAIL</a>
+                    <a id="dyn-contact-phone" href="" class="contact-link"><i data-lucide="phone"></i> VOICE</a>
+                    <!-- Socials injected here -->
+                </div>
+            </div>
+            
+            <div class="footer-bottom gs-reveal-up">
+                <p class="mono">SYS_VER: 5.0.0 // <span id="dyn-footer-name"></span></p>
+                <p class="mono">&copy; <span id="current-year">2026</span> - SECURE CONNECTION</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Initialize Main Logic -->
+    <script src="js/main.js?v=2"></script>
+</body>
+</html>

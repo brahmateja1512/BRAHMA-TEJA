@@ -1,0 +1,59 @@
+{
+  "skills": [
+    "Drone Architecture",
+    "STEM Integration",
+    "Automation Engineering",
+    "Python & C++",
+    "ROS2",
+    "Robot Control"
+  ],
+  "projects": [
+    {
+      "id": "1",
+      "title": "Autonomous Navigation Stack",
+      "status": "Active",
+      "tags": "ROS2, MediaPipe",
+      "github_url": "https://github.com/brahmateja1512",
+      "video_url": "",
+      "description": "A fully autonomous navigation stack built for UAVs."
+    },
+    {
+      "title": "Smart Radar System for Security ",
+      "status": "Completed",
+      "tags": "Montion Detection, Alert Forecasting",
+      "github_url": "file:///D:/porfolio/admin.html",
+      "video_url": "file:///D:/porfolio/admin.html",
+      "description": "no",
+      "id": "9a30d084-86a3-4ea3-8f35-85221ccc3375"
+    }
+  ],
+  "logs": [
+    {
+      "id": "1",
+      "type": "Experience",
+      "title": "Robotics Engineer",
+      "organization": "STEMx",
+      "date": "May 2025 - Feb 2026",
+      "location": "Hyderabad, India",
+      "description": "Developed automation solutions."
+    },
+    {
+      "id": "2",
+      "type": "Education",
+      "title": "M.Sc. Autonomy Technologies",
+      "organization": "FAU Erlangen",
+      "date": "Mar 2026 - Feb 2028",
+      "location": "Germany",
+      "description": "Master's degree focusing on robotic autonomy."
+    },
+    {
+      "type": "Education",
+      "title": "Secondary School ",
+      "organization": "oxford High School",
+      "date": "Jun 2018 - Apr 2019",
+      "location": "TENALI",
+      "description": "10TH CLASS- GENERAL SCIENCE\n",
+      "id": "5c929c5a-5bfa-4312-9308-b955caff73a4"
+    }
+  ]
+}
