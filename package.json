@@ -1,0 +1,40 @@
+{
+  "name": "next16-portfolio",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@react-three/drei": "^10.7.7",
+    "@react-three/fiber": "^9.6.1",
+    "@studio-freight/react-lenis": "^0.0.47",
+    "@supabase/supabase-js": "^2.40.0",
+    "@tailwindcss/postcss": "^4.3.1",
+    "clsx": "^2.1.0",
+    "framer-motion": "^11.0.0",
+    "gsap": "^3.15.0",
+    "lucide-react": "^0.350.0",
+    "maath": "^0.10.8",
+    "next": "16.0.0",
+    "next-sanity": "^13.1.1",
+    "react": "19.0.0",
+    "react-dom": "19.0.0",
+    "resend": "^6.14.0",
+    "sanity": "^6.1.0",
+    "styled-components": "^6.4.2",
+    "tailwind-merge": "^2.2.0",
+    "three": "^0.184.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "@types/react": "19.0.0",
+    "@types/react-dom": "19.0.0",
+    "postcss": "^8",
+    "tailwindcss": "4.0.0",
+    "typescript": "^5"
+  }
+}
