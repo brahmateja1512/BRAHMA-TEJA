@@ -6,7 +6,7 @@ import * as random from 'maath/random/dist/maath-random.esm'
 import { useState, useRef, Suspense } from 'react'
 
 function ParticleCloud(props: any) {
-  const ref = useRef<any>()
+  const ref = useRef<any>(null)
   const [sphere] = useState(() => random.inSphere(new Float32Array(5001), { radius: 1.5 }))
 
   useFrame((state, delta) => {
