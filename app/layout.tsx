@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
-import Navbar from '@/components/ui/Navbar'
+import NavigationWrapper from '@/components/ui/NavigationWrapper'
 import { LenisProvider } from '@/components/LenisProvider'
 const inter = Inter({ subsets: ['latin'] })
 
@@ -16,13 +16,12 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" className="dark" suppressHydrationWarning>
-      <body className={`${inter.className} min-h-screen flex flex-col`} suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning>
+      <body className={`${inter.className} min-h-screen flex flex-col font-sans antialiased bg-[#f5f0eb] dark:bg-[#0a0a0a] text-gray-900 dark:text-gray-100 selection:bg-red-500/30 selection:text-red-500 transition-colors duration-500`} suppressHydrationWarning>
         <LenisProvider>
-          <Navbar />
-          <main className="flex-1">
+          <NavigationWrapper>
             {children}
-          </main>
+          </NavigationWrapper>
         </LenisProvider>
       </body>
     </html>

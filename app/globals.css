@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:is(.dark *));
+
 @theme {
   --color-background: hsl(0 0% 100%);
   --color-foreground: hsl(222.2 84% 4.9%);
@@ -22,8 +24,19 @@
     @apply border-white/10;
   }
   body {
-    background-color: hsl(var(--background));
-    color: hsl(var(--foreground));
-    @apply antialiased selection:bg-white/20;
+    background-color: transparent;
+    color: inherit;
+    @apply antialiased selection:bg-red-500/30;
+  }
+}
+
+@layer utilities {
+  .bg-dot-pattern {
+    background-image: radial-gradient(rgba(0, 0, 0, 0.1) 1px, transparent 1px);
+    background-size: 20px 20px;
+  }
+  
+  .dark .bg-dot-pattern {
+    background-image: radial-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px);
   }
 }

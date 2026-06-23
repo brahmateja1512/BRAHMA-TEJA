@@ -2,22 +2,23 @@ import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 
 export function middleware(request: NextRequest) {
-  const path = request.nextUrl.pathname
-
-  if (path.startsWith('/admin/dashboard')) {
-    const token = request.cookies.get('admin_token')?.value
-    if (!token || token !== 'authenticated') {
-      return NextResponse.redirect(new URL('/admin/login', request.url))
+  // Check if the user is trying to access a protected route
+  if (request.nextUrl.pathname.startsWith('/admin') && !request.nextUrl.pathname.startsWith('/admin/login')) {
+    
+    // Check for the admin session cookie
+    const session = request.cookies.get('admin_session')
+    
+    if (!session || session.value !== 'authenticated') {
+      // Redirect to login if not authenticated
+      const loginUrl = new URL('/admin/login', request.url)
+      return NextResponse.redirect(loginUrl)
     }
   }
-
-  if (path === '/admin') {
-    return NextResponse.redirect(new URL('/admin/dashboard', request.url))
-  }
-
+  
   return NextResponse.next()
 }
 
+// Configure the matcher to run only on admin routes
 export const config = {
-  matcher: ['/admin/:path*'],
+  matcher: '/admin/:path*',
 }
