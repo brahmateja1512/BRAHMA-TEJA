@@ -27,13 +27,21 @@ export default function Home() {
     floating_tags: ['#Autonomy 🤖', '#AI 🧠', '#Embedded ⚡', '#Robotics 🔧', '#Vision 👁️', '#SLAM 🌐', '#Gazebo ⚙️']
   })
 
+  const [aboutData, setAboutData] = useState({
+    headline: "Engineering Autonomy & Building Robots.",
+    biography: "I am an ambitious Autonomy Technologies & Robotics Engineer. With a robust background in embedded systems and simulation, I strive to bridge the gap between software and physical hardware.",
+    projects_count: 10,
+    publications_count: 2
+  })
+
   useEffect(() => {
     async function fetchHero() {
       try {
-        const { data, error } = await supabase.from('hero_settings').select('*').eq('id', 1).single()
-        if (data && !error) {
-          setHeroData(data)
-        }
+        const { data: hero, error: heroErr } = await supabase.from('hero_settings').select('*').eq('id', 1).single()
+        if (hero && !heroErr) setHeroData(hero)
+
+        const { data: about, error: aboutErr } = await supabase.from('about_settings').select('*').eq('id', 1).single()
+        if (about && !aboutErr) setAboutData(about)
       } catch (e) {
         console.warn("Supabase fetch failed, likely missing credentials")
       }
@@ -231,11 +239,10 @@ export default function Home() {
                   <span className="uppercase tracking-widest font-bold">About Me</span>
                 </motion.div>
                 <div>
-                  <h2 className="text-4xl md:text-5xl lg:text-6xl font-black leading-tight mb-6 text-[#1A1B41] dark:text-[#FDFBF7]">
-                    Engineering <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FF4D4D] to-[#7B61FF]">Autonomy</span><br/>& Building Robots.
+                  <h2 className="text-4xl md:text-5xl lg:text-6xl font-black leading-tight mb-6 text-[#1A1B41] dark:text-[#FDFBF7]" dangerouslySetInnerHTML={{ __html: aboutData.headline.replace('Autonomy', '<span class="text-transparent bg-clip-text bg-gradient-to-r from-[#FF4D4D] to-[#7B61FF]">Autonomy</span>') }}>
                   </h2>
                   <div className="flex flex-col gap-6 text-gray-600 dark:text-gray-400 text-lg md:text-xl leading-relaxed font-medium">
-                    <p>I am an ambitious Autonomy Technologies & Robotics Engineer. With a robust background in embedded systems and simulation, I strive to bridge the gap between software and physical hardware.</p>
+                    <p>{aboutData.biography}</p>
                   </div>
                 </div>
               </div>
@@ -246,7 +253,7 @@ export default function Home() {
                   whileTap={{ scale: 0.95 }}
                   className="p-6 rounded-3xl bg-gray-50 dark:bg-[#111] border border-black/5 dark:border-white/5 flex flex-col gap-2 transition-transform duration-300"
                 >
-                  <span className="text-5xl font-black text-[#1A1B41] dark:text-[#FDFBF7]">10<span className="text-[#00F0FF]">+</span></span>
+                  <span className="text-5xl font-black text-[#1A1B41] dark:text-[#FDFBF7]">{aboutData.projects_count}<span className="text-[#00F0FF]">+</span></span>
                   <span className="text-xs uppercase tracking-widest text-gray-500 font-bold">Projects</span>
                 </motion.div>
                 <motion.div 
@@ -254,7 +261,7 @@ export default function Home() {
                   whileTap={{ scale: 0.95 }}
                   className="p-6 rounded-3xl bg-gray-50 dark:bg-[#111] border border-black/5 dark:border-white/5 flex flex-col gap-2 transition-transform duration-300"
                 >
-                  <span className="text-5xl font-black text-[#1A1B41] dark:text-[#FDFBF7]">2<span className="text-[#FF4D4D]">+</span></span>
+                  <span className="text-5xl font-black text-[#1A1B41] dark:text-[#FDFBF7]">{aboutData.publications_count}<span className="text-[#FF4D4D]">+</span></span>
                   <span className="text-xs uppercase tracking-widest text-gray-500 font-bold">Publications</span>
                 </motion.div>
               </div>

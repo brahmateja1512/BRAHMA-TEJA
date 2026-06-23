@@ -25,7 +25,7 @@ const navigation = [
   { name: 'Skills Manager', href: '/admin/skills', icon: Wrench },
   { name: 'Journey Manager', href: '/admin/journey', icon: Route },
   { name: 'Portfolio Manager', href: '/admin/portfolio', icon: FolderGit2 },
-  { name: 'Awards Manager', href: '/admin/awards', icon: Trophy },
+  { name: 'Achievements', href: '/admin/achievements', icon: Trophy },
   { name: 'Recommendations', href: '/admin/recommendations', icon: UserCircle },
   { name: 'System Settings', href: '/admin/settings', icon: Settings },
 ]
