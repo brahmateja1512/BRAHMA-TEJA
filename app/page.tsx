@@ -54,21 +54,29 @@ export default function Home() {
     // Basic GSAP animations for the hero section elements
     const ctx = gsap.context(() => {
       // Tags initial pop-in
-      gsap.to('.floating-tag', {
+      const tags = gsap.utils.toArray('.floating-tag')
+      gsap.to(tags, {
         opacity: 1,
         scale: 1,
-        duration: 0.8,
-        stagger: 0.1,
-        ease: 'back.out(1.7)',
+        rotation: () => gsap.utils.random(-15, 15),
+        duration: 1,
+        stagger: 0.15,
+        ease: 'elastic.out(1, 0.5)',
         onComplete: () => {
-          // Continuous floating effect
-          gsap.to('.floating-tag', {
-            y: '-=15',
-            duration: 2,
-            yoyo: true,
-            repeat: -1,
-            ease: 'sine.inOut',
-            stagger: 0.2
+          // Complex multi-axis continuous floating effect
+          tags.forEach((tag: any, i) => {
+            gsap.to(tag, {
+              y: 'random(-25, 25)',
+              x: 'random(-15, 15)',
+              rotationZ: 'random(-20, 20)',
+              rotationX: 'random(-10, 10)',
+              rotationY: 'random(-10, 10)',
+              duration: 'random(3, 6)',
+              yoyo: true,
+              repeat: -1,
+              ease: 'sine.inOut',
+              delay: i * 0.1
+            })
           })
         }
       })
@@ -130,25 +138,25 @@ export default function Home() {
           </h1>
         </div>
 
-        {/* Floating Tags */}
+        {/* Floating Tags with Anti-Overlap Distribution */}
         {heroData.floating_tags.map((tag, i) => {
-          // Pre-calculate positions for up to 10 tags
+          // Using strict safe-zones to prevent overlap
           const positions = [
-            { left: '10%', top: '20%', rot: '-10deg' },
-            { left: '85%', top: '15%', rot: '15deg' },
-            { left: '5%', top: '60%', rot: '5deg' },
-            { left: '80%', top: '70%', rot: '-8deg' },
-            { left: '15%', top: '85%', rot: '12deg' },
-            { left: '75%', top: '40%', rot: '-5deg' },
-            { left: '50%', top: '90%', rot: '0deg' },
-            { left: '30%', top: '10%', rot: '8deg' },
-            { left: '90%', top: '50%', rot: '-12deg' },
-            { left: '40%', top: '25%', rot: '5deg' },
+            { left: '8%', top: '15%' },
+            { left: '82%', top: '12%' },
+            { left: '12%', top: '65%' },
+            { left: '78%', top: '75%' },
+            { left: '25%', top: '85%' },
+            { left: '85%', top: '45%' },
+            { left: '60%', top: '88%' },
+            { left: '28%', top: '10%' },
+            { left: '90%', top: '30%' },
+            { left: '5%', top: '40%' },
           ]
           const pos = positions[i % positions.length]
           
           return (
-            <div key={i} className="floating-tag absolute z-20 px-4 py-2 bg-white/40 dark:bg-white/5 backdrop-blur-md border border-white/40 dark:border-white/10 rounded-xl text-sm font-mono font-bold text-[#1A1B41] dark:text-[#FDFBF7] shadow-lg pointer-events-none select-none opacity-0 scale-0" style={{left: pos.left, top: pos.top, transform: `rotate(${pos.rot})`}}>
+            <div key={i} className="floating-tag absolute z-20 px-5 py-2.5 bg-white/60 dark:bg-black/40 backdrop-blur-xl border border-white/80 dark:border-white/20 rounded-2xl shadow-[0_8px_32px_rgba(0,0,0,0.1)] text-sm md:text-base font-bold text-[#1A1B41] dark:text-[#FDFBF7] pointer-events-none select-none opacity-0 scale-0" style={{left: pos.left, top: pos.top}}>
               {tag}
             </div>
           )

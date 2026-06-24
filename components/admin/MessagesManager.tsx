@@ -34,10 +34,34 @@ export default function MessagesManager({ initialMessages }: { initialMessages: 
                 <div className="flex justify-between items-start mb-2">
                   <div>
                     <h4 className="font-bold text-lg text-[#1A1B41] dark:text-[#FDFBF7]">{msg.name}</h4>
-                    <a href={`mailto:${msg.email}`} className="text-sm font-medium text-[#00F0FF] hover:underline">{msg.email}</a>
+                    <div className="flex flex-col gap-0.5 mt-1">
+                      <a href={`mailto:${msg.email}`} className="text-sm font-medium text-[#00F0FF] hover:underline">{msg.email}</a>
+                      {msg.phone && <span className="text-sm font-mono text-gray-500">Phone: {msg.phone}</span>}
+                    </div>
                   </div>
                   <span className="text-xs font-mono text-gray-500">{new Date(msg.created_at).toLocaleString()}</span>
                 </div>
+                
+                {(msg.subject || msg.company || msg.project_type) && (
+                  <div className="flex flex-wrap gap-2 mb-3">
+                    {msg.project_type && (
+                      <span className="px-2 py-1 text-xs font-bold rounded-md bg-[#7B61FF]/10 text-[#7B61FF] dark:text-[#a594ff] border border-[#7B61FF]/20">
+                        {msg.project_type}
+                      </span>
+                    )}
+                    {msg.company && (
+                      <span className="px-2 py-1 text-xs font-bold rounded-md bg-gray-100 dark:bg-white/5 text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-white/10">
+                        🏢 {msg.company}
+                      </span>
+                    )}
+                    {msg.subject && (
+                      <span className="px-2 py-1 text-xs font-bold rounded-md bg-gray-100 dark:bg-white/5 text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-white/10">
+                        Subject: {msg.subject}
+                      </span>
+                    )}
+                  </div>
+                )}
+
                 <div className="bg-white dark:bg-white/5 p-4 rounded-xl border border-black/5 dark:border-white/5">
                   <p className="text-gray-700 dark:text-gray-300 whitespace-pre-wrap font-medium">{msg.message}</p>
                 </div>

@@ -1,11 +1,18 @@
 'use client'
 
-import { Mail, MapPin, Send, CheckCircle2 } from 'lucide-react'
-import { useState } from 'react'
+import { Mail, MapPin, Send, CheckCircle2, Github, Linkedin, Twitter } from 'lucide-react'
+import { useState, useEffect } from 'react'
 import { submitContactMessage } from '@/actions/contact'
+import { supabase } from '@/lib/supabase'
 
 export default function ContactSection() {
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
+  const [settings, setSettings] = useState<any>(null)
+
+  useEffect(() => {
+    supabase.from('system_settings').select('*').eq('id', 1).single()
+      .then(({ data }: { data: any }) => { if (data) setSettings(data) })
+  }, [])
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
@@ -46,6 +53,29 @@ export default function ContactSection() {
               </div>
               <span className="font-mono text-sm md:text-base">Erlangen, Germany</span>
             </div>
+            
+            {settings && (settings.github_url || settings.linkedin_url || settings.twitter_url) && (
+              <div className="pt-6 mt-6 border-t border-black/5 dark:border-white/10">
+                <p className="text-sm font-bold text-gray-500 uppercase tracking-widest mb-4">Connect on Socials</p>
+                <div className="flex gap-4">
+                  {settings.github_url && (
+                    <a href={settings.github_url} target="_blank" rel="noreferrer" className="w-12 h-12 bg-[#F8F9FA] dark:bg-white/5 rounded-full flex items-center justify-center border border-black/5 dark:border-white/10 hover:text-[#00F0FF] hover:border-[#00F0FF] transition-all">
+                      <Github size={20} />
+                    </a>
+                  )}
+                  {settings.linkedin_url && (
+                    <a href={settings.linkedin_url} target="_blank" rel="noreferrer" className="w-12 h-12 bg-[#F8F9FA] dark:bg-white/5 rounded-full flex items-center justify-center border border-black/5 dark:border-white/10 hover:text-[#00F0FF] hover:border-[#00F0FF] transition-all">
+                      <Linkedin size={20} />
+                    </a>
+                  )}
+                  {settings.twitter_url && (
+                    <a href={settings.twitter_url} target="_blank" rel="noreferrer" className="w-12 h-12 bg-[#F8F9FA] dark:bg-white/5 rounded-full flex items-center justify-center border border-black/5 dark:border-white/10 hover:text-[#00F0FF] hover:border-[#00F0FF] transition-all">
+                      <Twitter size={20} />
+                    </a>
+                  )}
+                </div>
+              </div>
+            )}
           </div>
         </div>
 
@@ -62,16 +92,42 @@ export default function ContactSection() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Name</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Name <span className="text-[#D71921]">*</span></label>
                 <input name="name" required type="text" className="w-full px-4 py-3 bg-white dark:bg-[#1d1d1f] border border-gray-200 dark:border-white/10 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#D71921]/50 dark:text-white" placeholder="John Doe" />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Email</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Email <span className="text-[#D71921]">*</span></label>
                 <input name="email" required type="email" className="w-full px-4 py-3 bg-white dark:bg-[#1d1d1f] border border-gray-200 dark:border-white/10 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#D71921]/50 dark:text-white" placeholder="john@example.com" />
               </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Phone (Optional)</label>
+                <input name="phone" type="tel" className="w-full px-4 py-3 bg-white dark:bg-[#1d1d1f] border border-gray-200 dark:border-white/10 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#D71921]/50 dark:text-white" placeholder="+49 151..." />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Company (Optional)</label>
+                <input name="company" type="text" className="w-full px-4 py-3 bg-white dark:bg-[#1d1d1f] border border-gray-200 dark:border-white/10 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#D71921]/50 dark:text-white" placeholder="Acme Corp" />
+              </div>
             </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Project Type</label>
+                <select name="project_type" className="w-full px-4 py-3 bg-white dark:bg-[#1d1d1f] border border-gray-200 dark:border-white/10 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#D71921]/50 dark:text-white appearance-none">
+                  <option value="General Inquiry">General Inquiry</option>
+                  <option value="Robotics Consulting">Robotics Consulting</option>
+                  <option value="Software Development">Software Development</option>
+                  <option value="Research Collaboration">Research Collaboration</option>
+                  <option value="Hiring / Job Opportunity">Hiring / Job Opportunity</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Subject <span className="text-[#D71921]">*</span></label>
+                <input name="subject" required type="text" className="w-full px-4 py-3 bg-white dark:bg-[#1d1d1f] border border-gray-200 dark:border-white/10 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#D71921]/50 dark:text-white" placeholder="Brief subject" />
+              </div>
+            </div>
+
             <div className="mb-8">
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Message</label>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Message <span className="text-[#D71921]">*</span></label>
               <textarea name="message" required rows={4} className="w-full px-4 py-3 bg-white dark:bg-[#1d1d1f] border border-gray-200 dark:border-white/10 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#D71921]/50 dark:text-white resize-none" placeholder="How can I help you?"></textarea>
             </div>
             <button disabled={status === 'loading'} type="submit" className="w-full bg-gray-900 dark:bg-white text-white dark:text-black font-bold py-4 rounded-xl hover:bg-gray-800 dark:hover:bg-gray-200 transition-colors flex items-center justify-center gap-2 disabled:opacity-50">

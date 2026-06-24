@@ -112,10 +112,12 @@ export default function SkillsManager({ initialSkills }: { initialSkills: any[] 
             <div>
               <label className="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">Category</label>
               <select name="category" className="w-full px-4 py-3 bg-[#FDFBF7] dark:bg-[#111] border border-gray-200 dark:border-white/10 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#00F0FF]/50 text-[#1A1B41] dark:text-[#FDFBF7]">
-                <option value="Robotics">Robotics</option>
-                <option value="Software">Software</option>
-                <option value="AI/ML">AI/ML</option>
-                <option value="Hardware">Hardware</option>
+                <option value="Hardware & Boards">Hardware & Boards</option>
+                <option value="Technologies">Technologies</option>
+                <option value="Tools & Software">Tools & Software</option>
+                <option value="Frameworks & Libraries">Frameworks & Libraries</option>
+                <option value="Programming Languages">Programming Languages</option>
+                <option value="CAD/CAM">CAD/CAM</option>
               </select>
             </div>
             <div>
