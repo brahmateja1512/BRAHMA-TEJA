@@ -215,7 +215,7 @@ export default function Home() {
               <div className="relative aspect-[4/5] w-full max-w-md mx-auto rounded-[3rem] p-2 bg-gradient-to-tr from-[#FF4D4D]/20 via-transparent to-[#00F0FF]/20 backdrop-blur-3xl shadow-2xl rotate-[-3deg] hover:rotate-0 transition-transform duration-700">
                 <div className="absolute inset-0 bg-white/40 dark:bg-black/40 rounded-[3rem] backdrop-blur-md border border-white/50 dark:border-white/10" />
                 <div className="w-full h-full rounded-[2.5rem] overflow-hidden relative bg-[#1A1B41] dark:bg-[#111] flex items-center justify-center z-10 shadow-inner">
-                   <span className="text-[#00F0FF] text-sm font-mono tracking-widest uppercase">Profile_Photo.jpg</span>
+                   <img src="/profile.jpg" alt="Brahma Teja Jampu" className="w-full h-full object-cover" />
                 </div>
               </div>
             </motion.div>
