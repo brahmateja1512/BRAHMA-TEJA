@@ -5,10 +5,15 @@ import Link from 'next/link'
 import { ArrowRight, Image as ImageIcon } from 'lucide-react'
 
 const GALLERY_PREVIEW = [
-  { src: "/gallery/university_group.jpg", title: "University Group Photo" },
-  { src: "/gallery/engineers_day.jpg", title: "Engineers Day Speech" },
-  { src: "/gallery/robotics_workshop.jpg", title: "Building Autonomous Robots" },
-  { src: "/gallery/mahotsav_festival.jpg", title: "Mahotsav Youth Festival" },
+  { src: "/gallery/DSC05166.JPG", title: "University Event" },
+  { src: "/gallery/DSC06108.JPG", title: "Speaker Session" },
+  { src: "/gallery/DSC06722.JPG", title: "Robotics Workshop" },
+  { src: "/gallery/IMG-20240806-WA0003.jpg", title: "Team Assembly" },
+  { src: "/gallery/IMG_20240606_115930_289.jpg", title: "Hardware Testing" },
+  { src: "/gallery/IMG_20240706_202531_695.jpg", title: "Hackathon Highlight" },
+  { src: "/gallery/IMG_20250720_013550.jpg", title: "Research Lab" },
+  { src: "/gallery/PXL_20260604_111125472.jpg", title: "Project Deployment" },
+  { src: "/gallery/_DSC0479.JPG", title: "Award Ceremony" },
 ]
 
 export default function GallerySection() {
