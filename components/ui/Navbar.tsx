@@ -12,13 +12,27 @@ export default function Navbar() {
   const [activeSection, setActiveSection] = useState<string>('')
   const pathname = usePathname()
 
-  // Initialize theme state on mount based on what the layout script applied
+  // Initialize theme state and listen for live system theme changes
   useEffect(() => {
-    if (document.documentElement.classList.contains('dark')) {
-      setTheme('dark')
-    } else {
-      setTheme('light')
+    const isDark = document.documentElement.classList.contains('dark')
+    setTheme(isDark ? 'dark' : 'light')
+
+    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
+    
+    const handleChange = (e: MediaQueryListEvent) => {
+      // Automatically sync with device theme if the device settings change while open
+      if (e.matches) {
+        document.documentElement.classList.add('dark')
+        setTheme('dark')
+      } else {
+        document.documentElement.classList.remove('dark')
+        setTheme('light')
+      }
+      localStorage.removeItem('theme') // Clear manual override so it continues to sync
     }
+
+    mediaQuery.addEventListener('change', handleChange)
+    return () => mediaQuery.removeEventListener('change', handleChange)
   }, [])
 
   // Track active section for homepage hash links
@@ -84,8 +98,8 @@ export default function Navbar() {
   ]
 
   return (
-    <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50">
-      <nav className="flex items-end gap-2 px-4 py-3 bg-white/50 dark:bg-black/50 backdrop-blur-2xl border border-white/40 dark:border-white/10 rounded-3xl shadow-2xl transition-colors duration-500">
+    <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 w-full max-w-[95vw] md:max-w-fit px-2">
+      <nav className="flex items-center gap-2 px-4 py-3 bg-white/50 dark:bg-black/50 backdrop-blur-2xl border border-white/40 dark:border-white/10 rounded-3xl shadow-2xl transition-colors duration-500 overflow-x-auto hide-scrollbar">
         
         {navLinks.map((link, i) => {
           const Icon = link.icon
@@ -126,7 +140,7 @@ export default function Navbar() {
                 onMouseLeave={() => setHoveredIndex(null)}
                 animate={{ scale, y }}
                 transition={{ type: 'spring', stiffness: 400, damping: 25 }}
-                className={`relative flex items-center justify-center w-12 h-12 border rounded-2xl shadow-sm transition-colors duration-300 ${
+                className={`shrink-0 relative flex items-center justify-center w-12 h-12 border rounded-2xl shadow-sm transition-colors duration-300 ${
                   isActive 
                     ? 'bg-[#1A1B41] dark:bg-[#FDFBF7] border-transparent text-[#FDFBF7] dark:text-[#1A1B41] shadow-lg' 
                     : 'bg-white/80 dark:bg-white/5 border-black/5 dark:border-white/10 text-gray-600 dark:text-gray-400 hover:text-[#1A1B41] dark:hover:text-[#FDFBF7] hover:bg-white dark:hover:bg-white/10'
@@ -154,7 +168,7 @@ export default function Navbar() {
           )
         })}
 
-        <div className="w-px h-10 bg-gray-300 dark:bg-white/20 mx-2 self-center rounded-full" />
+        <div className="shrink-0 w-px h-10 bg-gray-300 dark:bg-white/20 mx-2 self-center rounded-full" />
 
         <motion.button
           onClick={toggleTheme}
@@ -165,7 +179,7 @@ export default function Navbar() {
             y: hoveredIndex === navLinks.length ? -10 : hoveredIndex === navLinks.length - 1 ? -4 : 0
           }}
           transition={{ type: 'spring', stiffness: 400, damping: 25 }}
-          className="relative flex items-center justify-center w-12 h-12 bg-white/80 dark:bg-white/5 border border-black/5 dark:border-white/10 rounded-2xl shadow-sm text-gray-600 dark:text-gray-400 hover:text-[#1A1B41] dark:hover:text-[#FDFBF7] hover:bg-white dark:hover:bg-white/10"
+          className="shrink-0 relative flex items-center justify-center w-12 h-12 bg-white/80 dark:bg-white/5 border border-black/5 dark:border-white/10 rounded-2xl shadow-sm text-gray-600 dark:text-gray-400 hover:text-[#1A1B41] dark:hover:text-[#FDFBF7] hover:bg-white dark:hover:bg-white/10"
           aria-label="Toggle Theme"
         >
           {theme === 'dark' ? <Sun strokeWidth={1.5} size={22} /> : <Moon strokeWidth={1.5} size={22} />}
@@ -189,7 +203,7 @@ export default function Navbar() {
               y: hoveredIndex === navLinks.length + 1 ? -10 : hoveredIndex === navLinks.length ? -4 : 0
             }}
             transition={{ type: 'spring', stiffness: 400, damping: 25 }}
-            className="relative flex items-center justify-center w-12 h-12 bg-[#FF4D4D] border border-red-600 rounded-2xl shadow-md text-white"
+            className="shrink-0 relative flex items-center justify-center w-12 h-12 bg-[#FF4D4D] border border-red-600 rounded-2xl shadow-md text-white"
           >
             <Download strokeWidth={2} size={22} />
             {hoveredIndex === navLinks.length + 1 && (

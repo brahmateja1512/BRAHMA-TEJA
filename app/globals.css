@@ -39,4 +39,12 @@
   .dark .bg-dot-pattern {
     background-image: radial-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px);
   }
+  
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .hide-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
 }
