@@ -12,10 +12,12 @@ export default function Navbar() {
   const [activeSection, setActiveSection] = useState<string>('')
   const pathname = usePathname()
 
-  // Initialize theme on mount
+  // Initialize theme state on mount based on what the layout script applied
   useEffect(() => {
     if (document.documentElement.classList.contains('dark')) {
       setTheme('dark')
+    } else {
+      setTheme('light')
     }
   }, [])
 
@@ -27,7 +29,7 @@ export default function Navbar() {
     }
 
     const handleScroll = () => {
-      const sections = ['home', 'about', 'skills', 'experience', 'projects', 'achievements', 'contact']
+      const sections = ['home', 'about', 'skills', 'experience', 'projects', 'achievements', 'gallery-preview', 'contact']
       let currentSection = ''
       
       for (const section of sections) {
@@ -59,9 +61,11 @@ export default function Navbar() {
     const isDark = document.documentElement.classList.contains('dark')
     if (isDark) {
       document.documentElement.classList.remove('dark')
+      localStorage.setItem('theme', 'light')
       setTheme('light')
     } else {
       document.documentElement.classList.add('dark')
+      localStorage.setItem('theme', 'dark')
       setTheme('dark')
     }
   }
@@ -74,8 +78,8 @@ export default function Navbar() {
     { name: 'Education', href: '/#experience', icon: GraduationCap },
     { name: 'Projects', href: '/projects', icon: FileCode2 },
     { name: 'Publications', href: '/publications', icon: BookOpen },
-    { name: 'Gallery', href: '/gallery', icon: ImageIcon },
     { name: 'Awards', href: '/#achievements', icon: Trophy },
+    { name: 'Gallery', href: '/gallery', icon: ImageIcon },
     { name: 'Contact', href: '/#contact', icon: Mail },
   ]
 
@@ -93,6 +97,11 @@ export default function Navbar() {
           
           // Highlight Projects and Publications when scrolling over #projects section on homepage
           if (activeSection === '/#projects' && (link.href === '/projects' || link.href === '/publications')) {
+            isActive = true
+          }
+          
+          // Highlight Gallery when scrolling over #gallery-preview section on homepage
+          if (activeSection === '/#gallery-preview' && link.href === '/gallery') {
             isActive = true
           }
 
