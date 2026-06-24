@@ -5,6 +5,8 @@ import NavigationWrapper from '@/components/ui/NavigationWrapper'
 import { LenisProvider } from '@/components/LenisProvider'
 import GlobalFallingTags from '@/components/ui/GlobalFallingTags'
 import GameAccessButton from '@/components/ui/GameAccessButton'
+import { Analytics } from '@vercel/analytics/react'
+
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
@@ -42,6 +44,7 @@ export default function RootLayout({
             {children}
           </NavigationWrapper>
         </LenisProvider>
+        <Analytics />
       </body>
     </html>
   )
