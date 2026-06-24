@@ -4,12 +4,13 @@ import { motion } from 'framer-motion'
 import { useState } from 'react'
 
 interface FilterMenuProps {
+  id?: string
   options: string[]
   activeOption: string
   onSelect: (option: string) => void
 }
 
-export default function FilterMenu({ options, activeOption, onSelect }: FilterMenuProps) {
+export default function FilterMenu({ id = 'default', options, activeOption, onSelect }: FilterMenuProps) {
   return (
     <div className="flex items-center justify-center w-full mb-8">
       <div className="inline-flex bg-white/50 dark:bg-[#111]/50 p-1.5 rounded-full backdrop-blur-xl border border-[#1A1B41]/10 dark:border-[#FDFBF7]/10 relative shadow-sm">
@@ -28,7 +29,7 @@ export default function FilterMenu({ options, activeOption, onSelect }: FilterMe
             >
               {isActive && (
                 <motion.div
-                  layoutId="activeFilterBg"
+                  layoutId={`activeFilterBg-${id}`}
                   className="absolute inset-0 bg-[#1A1B41] dark:bg-[#FDFBF7] rounded-full shadow-md"
                   transition={{ type: 'spring', stiffness: 400, damping: 30 }}
                   style={{ zIndex: -1 }}

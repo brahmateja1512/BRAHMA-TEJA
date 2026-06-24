@@ -1,17 +1,34 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import FilterMenu from '@/components/ui/FilterMenu'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Rocket, BookOpen, ArrowRight, ExternalLink } from 'lucide-react'
-import { PROJECTS_DATA, PUBLICATIONS_DATA } from '@/data/portfolio'
+import { supabase } from '@/lib/supabase'
 import Link from 'next/link'
 
 export default function ProjectsSection() {
   const [activeTab, setActiveTab] = useState('Projects')
+  const [projectsData, setProjectsData] = useState<any[]>([])
+  const [publicationsData, setPublicationsData] = useState<any[]>([])
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const { data: projData } = await supabase.from('projects').select('*').order('created_at', { ascending: false }).limit(4)
+        if (projData) setProjectsData(projData)
+
+        const { data: pubData } = await supabase.from('publications').select('*').order('created_at', { ascending: false }).limit(4)
+        if (pubData) setPublicationsData(pubData)
+      } catch (e) {
+        console.warn("Failed to fetch portfolio data")
+      }
+    }
+    fetchData()
+  }, [])
 
   const isProjects = activeTab === 'Projects'
-  const currentData = isProjects ? PROJECTS_DATA.slice(0, 4) : PUBLICATIONS_DATA.slice(0, 4)
+  const currentData = isProjects ? projectsData : publicationsData
   const Icon = isProjects ? Rocket : BookOpen
 
   return (
@@ -20,6 +37,7 @@ export default function ProjectsSection() {
         <div className="text-center mb-12">
           <h2 className="text-4xl md:text-5xl font-black text-[#1A1B41] dark:text-[#FDFBF7] mb-8">PORTFOLIO</h2>
           <FilterMenu 
+            id="projects-filter"
             options={['Projects', 'Publications']} 
             activeOption={activeTab} 
             onSelect={setActiveTab} 
@@ -44,7 +62,7 @@ export default function ProjectsSection() {
                   </div>
                   <div>
                     <span className="text-xs font-bold tracking-widest uppercase text-gray-500 dark:text-gray-400">
-                      {'publisher' in item ? `${item.publisher} • ${item.date}` : item.type}
+                      {!isProjects ? `${item.publisher} • ${item.published_date}` : item.type}
                     </span>
                     <h3 className="text-xl md:text-2xl font-bold text-gray-900 dark:text-white leading-tight mt-1 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
                       {item.title}
@@ -53,12 +71,12 @@ export default function ProjectsSection() {
                 </div>
 
                 <p className="text-gray-600 dark:text-gray-300 leading-relaxed mb-8 flex-1">
-                  {'shortDescription' in item ? item.shortDescription : (item as any).description}
+                  {item.short_description}
                 </p>
 
                 <div className="flex items-center justify-between mt-auto pt-6 border-t border-gray-100 dark:border-white/10">
                   <div className="flex gap-2">
-                    {'tags' in item && item.tags.map(tag => (
+                    {item.tags && item.tags.map((tag: string) => (
                       <span key={tag} className="px-3 py-1 bg-gray-50 dark:bg-black/40 border border-black/5 dark:border-white/10 rounded-lg text-xs font-mono text-gray-700 dark:text-gray-300">
                         #{tag}
                       </span>

@@ -35,6 +35,7 @@ export default function ExperienceSection() {
         <div className="text-center mb-12">
           <h2 className="text-4xl md:text-5xl font-black text-[#1A1B41] dark:text-[#FDFBF7] mb-8">JOURNEY</h2>
           <FilterMenu 
+            id="experience-filter"
             options={['Experience', 'Education']} 
             activeOption={activeTab} 
             onSelect={setActiveTab} 
