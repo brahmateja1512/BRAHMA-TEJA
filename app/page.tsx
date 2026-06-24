@@ -13,6 +13,7 @@ import ExperienceSection from '@/components/home/ExperienceSection'
 import ProjectsSection from '@/components/home/ProjectsSection'
 import AchievementsSection from '@/components/home/AchievementsSection'
 import RecommendationsSection from '@/components/home/RecommendationsSection'
+import GallerySection from '@/components/home/GallerySection'
 import ContactSection from '@/components/home/ContactSection'
 
 export default function Home() {
@@ -277,6 +278,7 @@ export default function Home() {
         <ProjectsSection />
         <AchievementsSection />
         <RecommendationsSection />
+        <GallerySection />
         <ContactSection />
       </div>
       
