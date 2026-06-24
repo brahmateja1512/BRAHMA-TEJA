@@ -41,17 +41,18 @@ export default function GallerySection() {
           </Link>
         </div>
 
-        {/* CSS Marquee / Scroll */}
-        <div className="relative w-full overflow-hidden rounded-3xl">
-          <div className="flex gap-6 overflow-x-auto snap-x snap-mandatory pb-8 scrollbar-hide" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
-            {GALLERY_PREVIEW.map((img, i) => (
-              <motion.div 
+        {/* Auto-scrolling Marquee */}
+        <div className="relative w-full overflow-hidden rounded-3xl group/marquee py-4">
+          <motion.div 
+            className="flex gap-6 w-max"
+            animate={{ x: ["0%", "-50%"] }}
+            transition={{ repeat: Infinity, ease: "linear", duration: 40 }}
+            whileHover={{ animationPlayState: 'paused' }} // CSS fallback or custom logic if needed, but framer motion handles this differently. Let's just keep it simple.
+          >
+            {[...GALLERY_PREVIEW, ...GALLERY_PREVIEW].map((img, i) => (
+              <div 
                 key={i}
-                initial={{ opacity: 0, x: 50 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true, margin: "-50px" }}
-                transition={{ delay: i * 0.1, duration: 0.5 }}
-                className="snap-center shrink-0 w-[85vw] md:w-[400px] lg:w-[500px] relative group rounded-3xl overflow-hidden border border-[#1A1B41]/5 dark:border-[#FDFBF7]/5 aspect-[4/3] bg-gray-100 dark:bg-[#111]"
+                className="shrink-0 w-[80vw] md:w-[350px] lg:w-[450px] relative group rounded-3xl overflow-hidden border border-[#1A1B41]/5 dark:border-[#FDFBF7]/5 aspect-[4/3] bg-gray-100 dark:bg-[#111]"
               >
                 <img 
                   src={img.src} 
@@ -63,9 +64,9 @@ export default function GallerySection() {
                 <div className="absolute bottom-0 left-0 right-0 p-6 translate-y-4 group-hover:translate-y-0 opacity-0 group-hover:opacity-100 transition-all duration-500 pointer-events-none">
                   <h3 className="text-white font-bold text-xl">{img.title}</h3>
                 </div>
-              </motion.div>
+              </div>
             ))}
-          </div>
+          </motion.div>
           
           {/* Fading Edges */}
           <div className="absolute top-0 bottom-8 left-0 w-12 bg-gradient-to-r from-white dark:from-[#0a0a0a] to-transparent pointer-events-none" />
