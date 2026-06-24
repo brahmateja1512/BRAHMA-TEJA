@@ -4,12 +4,10 @@ import { motion } from 'framer-motion'
 import Link from 'next/link'
 
 const GALLERY_IMAGES = [
-  { src: "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?q=80&w=2940&auto=format&fit=crop", title: "Robot Arm Assembly" },
-  { src: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?q=80&w=2940&auto=format&fit=crop", title: "Lab Workspace" },
-  { src: "https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=2940&auto=format&fit=crop", title: "Circuit Board" },
-  { src: "https://images.unsplash.com/photo-1535378917042-10a22c95931a?q=80&w=2948&auto=format&fit=crop", title: "Hardware Testing" },
-  { src: "https://images.unsplash.com/photo-1580835239846-5bb9ce03c8c3?q=80&w=2836&auto=format&fit=crop", title: "Robotics Design" },
-  { src: "https://images.unsplash.com/photo-1496247749665-49cf5b1022e9?q=80&w=2946&auto=format&fit=crop", title: "Coding Session" },
+  { src: "/gallery/university_group.jpg", title: "University Group Photo" },
+  { src: "/gallery/engineers_day.jpg", title: "Engineers Day Speech" },
+  { src: "/gallery/robotics_workshop.jpg", title: "Building Autonomous Robots" },
+  { src: "/gallery/mahotsav_festival.jpg", title: "Mahotsav Youth Festival" },
 ]
 
 const containerVars = {
