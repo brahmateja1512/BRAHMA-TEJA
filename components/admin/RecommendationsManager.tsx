@@ -3,11 +3,39 @@
 import { useState } from 'react'
 import { Plus, Quote } from 'lucide-react'
 import { saveRecommendation, deleteRecommendation } from '@/actions/recommendations'
+import { bulkUpdateOrder } from '@/actions/reorder'
+import { ArrowUp, ArrowDown } from 'lucide-react'
 
 export default function RecommendationsManager({ initialRecommendations }: { initialRecommendations: any[] }) {
   const [showAddForm, setShowAddForm] = useState(false)
   const [loading, setLoading] = useState(false)
   const [editingId, setEditingId] = useState<string | null>(null)
+
+  const [items, setItems] = useState(() => {
+    return [...initialRecommendations]
+      .map((item, idx) => ({ ...item, display_order: item.display_order ?? idx }))
+      .sort((a, b) => a.display_order - b.display_order)
+  })
+
+  async function handleMove(index: number, direction: 'up' | 'down') {
+    if (direction === 'up' && index === 0) return
+    if (direction === 'down' && index === items.length - 1) return
+
+    const newItems = [...items]
+    const swapIndex = direction === 'up' ? index - 1 : index + 1
+    
+    const temp = newItems[index]
+    newItems[index] = newItems[swapIndex]
+    newItems[swapIndex] = temp
+
+    const updatedItems = newItems.map((item, idx) => ({ ...item, display_order: idx }))
+    setItems(updatedItems)
+    
+    setLoading(true)
+    const updates = updatedItems.map(item => ({ id: item.id, order: item.display_order }))
+    await bulkUpdateOrder('recommendations', updates)
+    setLoading(false)
+  }
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
@@ -89,10 +117,17 @@ export default function RecommendationsManager({ initialRecommendations }: { ini
       )}
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {initialRecommendations.length === 0 ? (
+        {items.length === 0 ? (
           <p className="text-gray-500 italic p-4 col-span-full text-center">No recommendations found.</p>
-        ) : initialRecommendations.map((rec) => (
-          <div key={rec.id} className="p-8 border border-black/5 dark:border-white/10 rounded-3xl bg-[#FDFBF7] dark:bg-[#050505] flex flex-col justify-between">
+        ) : items.map((rec, index) => (
+          <div key={rec.id} className="relative group p-8 border border-black/5 dark:border-white/10 rounded-3xl bg-[#FDFBF7] dark:bg-[#050505] flex flex-col justify-between">
+            
+            {/* Reorder Buttons */}
+            <div className="absolute -left-3 top-1/2 -translate-y-1/2 flex flex-col gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+              <button onClick={() => handleMove(index, 'up')} disabled={index === 0 || loading} className="p-1 bg-white dark:bg-gray-800 rounded-full shadow border border-gray-200 dark:border-gray-700 hover:text-blue-500 disabled:opacity-30"><ArrowUp size={14}/></button>
+              <button onClick={() => handleMove(index, 'down')} disabled={index === items.length - 1 || loading} className="p-1 bg-white dark:bg-gray-800 rounded-full shadow border border-gray-200 dark:border-gray-700 hover:text-blue-500 disabled:opacity-30"><ArrowDown size={14}/></button>
+            </div>
+
             <div>
               <Quote className="text-gray-200 dark:text-white/5 w-12 h-12 mb-4" />
               <p className="text-gray-700 dark:text-gray-300 italic mb-6">"{rec.text}"</p>

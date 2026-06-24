@@ -2,6 +2,8 @@
 
 import { useState } from 'react'
 import { saveProject, deleteProject, savePublication, deletePublication } from '@/actions/portfolio'
+import { bulkUpdateOrder } from '@/actions/reorder'
+import { ArrowUp, ArrowDown } from 'lucide-react'
 
 export default function PortfolioManager({ initialProjects, initialPublications }: { initialProjects: any[], initialPublications: any[] }) {
   const [showAddForm, setShowAddForm] = useState(false)
@@ -9,11 +11,40 @@ export default function PortfolioManager({ initialProjects, initialPublications 
   const [loading, setLoading] = useState(false)
   const [editingId, setEditingId] = useState<string | null>(null)
   
-  // Combine and sort for the list view
-  const allEntries = [
-    ...initialProjects.map(p => ({ ...p, _kind: 'Projects', _org: p.type })),
-    ...initialPublications.map(p => ({ ...p, _kind: 'Publications', _org: p.publisher }))
-  ].sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
+  const [projects, setProjects] = useState(() => {
+    return [...initialProjects]
+      .map((item, idx) => ({ ...item, display_order: item.display_order ?? idx }))
+      .sort((a, b) => a.display_order - b.display_order)
+  })
+
+  const [publications, setPublications] = useState(() => {
+    return [...initialPublications]
+      .map((item, idx) => ({ ...item, display_order: item.display_order ?? idx }))
+      .sort((a, b) => a.display_order - b.display_order)
+  })
+
+  async function handleMove(index: number, direction: 'up' | 'down', kind: 'projects' | 'publications') {
+    const items = kind === 'projects' ? projects : publications
+    const setItems = kind === 'projects' ? setProjects : setPublications
+
+    if (direction === 'up' && index === 0) return
+    if (direction === 'down' && index === items.length - 1) return
+
+    const newItems = [...items]
+    const swapIndex = direction === 'up' ? index - 1 : index + 1
+    
+    const temp = newItems[index]
+    newItems[index] = newItems[swapIndex]
+    newItems[swapIndex] = temp
+
+    const updatedItems = newItems.map((item, idx) => ({ ...item, display_order: idx }))
+    setItems(updatedItems)
+    
+    setLoading(true)
+    const updates = updatedItems.map(item => ({ id: item.id, order: item.display_order }))
+    await bulkUpdateOrder(kind, updates)
+    setLoading(false)
+  }
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
@@ -199,26 +230,62 @@ export default function PortfolioManager({ initialProjects, initialPublications 
         </form>
       )}
       
-      <div className="space-y-4">
-        {allEntries.length === 0 ? (
-          <p className="text-gray-500 italic p-4 text-center">No portfolio items found. Add your first project or publication above!</p>
-        ) : allEntries.map((item: any) => (
-          <div key={item.id} className="flex flex-col md:flex-row md:items-center justify-between p-6 border border-black/5 dark:border-white/10 rounded-2xl bg-[#FDFBF7] dark:bg-[#050505] gap-4">
-            <div>
-              <div className="flex items-center gap-3 mb-2">
-                <span className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-widest ${item._kind === 'Projects' ? 'bg-[#7B61FF]/10 text-[#7B61FF]' : 'bg-[#00F0FF]/10 text-[#00F0FF]'}`}>
-                  {item._kind}
-                </span>
+      <div className="mb-4">
+        <h3 className="text-xl font-bold text-[#1A1B41] dark:text-[#FDFBF7] mb-4">Projects</h3>
+        <div className="space-y-4">
+          {projects.length === 0 ? (
+            <p className="text-gray-500 italic p-4 text-center">No projects found.</p>
+          ) : projects.map((item, index) => (
+            <div key={item.id} className="relative group flex flex-col md:flex-row md:items-center justify-between p-6 border border-black/5 dark:border-white/10 rounded-2xl bg-[#FDFBF7] dark:bg-[#050505] gap-4">
+              <div className="absolute -left-3 top-1/2 -translate-y-1/2 flex flex-col gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                <button onClick={() => handleMove(index, 'up', 'projects')} disabled={index === 0 || loading} className="p-1 bg-white dark:bg-gray-800 rounded-full shadow border border-gray-200 dark:border-gray-700 hover:text-blue-500 disabled:opacity-30"><ArrowUp size={14}/></button>
+                <button onClick={() => handleMove(index, 'down', 'projects')} disabled={index === projects.length - 1 || loading} className="p-1 bg-white dark:bg-gray-800 rounded-full shadow border border-gray-200 dark:border-gray-700 hover:text-blue-500 disabled:opacity-30"><ArrowDown size={14}/></button>
               </div>
-              <h3 className="font-bold text-xl text-[#1A1B41] dark:text-[#FDFBF7]">{item.title}</h3>
-              <p className="text-gray-500 font-medium">{item._org}</p>
+              <div>
+                <div className="flex items-center gap-3 mb-2">
+                  <span className="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-widest bg-[#7B61FF]/10 text-[#7B61FF]">
+                    Projects
+                  </span>
+                </div>
+                <h3 className="font-bold text-xl text-[#1A1B41] dark:text-[#FDFBF7]">{item.title}</h3>
+                <p className="text-gray-500 font-medium">{item.type}</p>
+              </div>
+              <div className="flex gap-2">
+                <button onClick={() => handleEdit({ ...item, _kind: 'Projects' })} disabled={loading} className="text-gray-400 hover:text-blue-500 font-bold px-4 py-2 border border-black/10 dark:border-white/10 rounded-xl transition-colors disabled:opacity-50">Edit</button>
+                <button onClick={() => handleDelete(item.id, 'Projects')} disabled={loading} className="text-gray-400 hover:text-red-500 font-bold px-4 py-2 border border-black/10 dark:border-white/10 rounded-xl transition-colors disabled:opacity-50">Delete</button>
+              </div>
             </div>
-            <div className="flex gap-2">
-              <button onClick={() => handleEdit(item)} disabled={loading} className="text-gray-400 hover:text-blue-500 font-bold px-4 py-2 border border-black/10 dark:border-white/10 rounded-xl transition-colors disabled:opacity-50">Edit</button>
-              <button onClick={() => handleDelete(item.id, item._kind)} disabled={loading} className="text-gray-400 hover:text-red-500 font-bold px-4 py-2 border border-black/10 dark:border-white/10 rounded-xl transition-colors disabled:opacity-50">Delete</button>
+          ))}
+        </div>
+      </div>
+
+      <div>
+        <h3 className="text-xl font-bold text-[#1A1B41] dark:text-[#FDFBF7] mb-4 mt-8">Publications</h3>
+        <div className="space-y-4">
+          {publications.length === 0 ? (
+            <p className="text-gray-500 italic p-4 text-center">No publications found.</p>
+          ) : publications.map((item, index) => (
+            <div key={item.id} className="relative group flex flex-col md:flex-row md:items-center justify-between p-6 border border-black/5 dark:border-white/10 rounded-2xl bg-[#FDFBF7] dark:bg-[#050505] gap-4">
+              <div className="absolute -left-3 top-1/2 -translate-y-1/2 flex flex-col gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                <button onClick={() => handleMove(index, 'up', 'publications')} disabled={index === 0 || loading} className="p-1 bg-white dark:bg-gray-800 rounded-full shadow border border-gray-200 dark:border-gray-700 hover:text-blue-500 disabled:opacity-30"><ArrowUp size={14}/></button>
+                <button onClick={() => handleMove(index, 'down', 'publications')} disabled={index === publications.length - 1 || loading} className="p-1 bg-white dark:bg-gray-800 rounded-full shadow border border-gray-200 dark:border-gray-700 hover:text-blue-500 disabled:opacity-30"><ArrowDown size={14}/></button>
+              </div>
+              <div>
+                <div className="flex items-center gap-3 mb-2">
+                  <span className="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-widest bg-[#00F0FF]/10 text-[#00F0FF]">
+                    Publications
+                  </span>
+                </div>
+                <h3 className="font-bold text-xl text-[#1A1B41] dark:text-[#FDFBF7]">{item.title}</h3>
+                <p className="text-gray-500 font-medium">{item.publisher}</p>
+              </div>
+              <div className="flex gap-2">
+                <button onClick={() => handleEdit({ ...item, _kind: 'Publications' })} disabled={loading} className="text-gray-400 hover:text-blue-500 font-bold px-4 py-2 border border-black/10 dark:border-white/10 rounded-xl transition-colors disabled:opacity-50">Edit</button>
+                <button onClick={() => handleDelete(item.id, 'Publications')} disabled={loading} className="text-gray-400 hover:text-red-500 font-bold px-4 py-2 border border-black/10 dark:border-white/10 rounded-xl transition-colors disabled:opacity-50">Delete</button>
+              </div>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
     </div>
   )
