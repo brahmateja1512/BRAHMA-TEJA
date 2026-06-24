@@ -3,12 +3,40 @@
 import { useState } from 'react'
 import { Plus, Briefcase, GraduationCap } from 'lucide-react'
 import { saveJourney, deleteJourney } from '@/actions/journey'
+import { bulkUpdateOrder } from '@/actions/reorder'
+import { ArrowUp, ArrowDown } from 'lucide-react'
 
 export default function JourneyManager({ initialJourney }: { initialJourney: any[] }) {
   const [showAddForm, setShowAddForm] = useState(false)
   const [loading, setLoading] = useState(false)
   const [editingId, setEditingId] = useState<string | null>(null)
   const [formType, setFormType] = useState('Experience')
+
+  const [items, setItems] = useState(() => {
+    return [...initialJourney]
+      .map((item, idx) => ({ ...item, display_order: item.display_order ?? idx }))
+      .sort((a, b) => a.display_order - b.display_order)
+  })
+
+  async function handleMove(index: number, direction: 'up' | 'down') {
+    if (direction === 'up' && index === 0) return
+    if (direction === 'down' && index === items.length - 1) return
+
+    const newItems = [...items]
+    const swapIndex = direction === 'up' ? index - 1 : index + 1
+    
+    const temp = newItems[index]
+    newItems[index] = newItems[swapIndex]
+    newItems[swapIndex] = temp
+
+    const updatedItems = newItems.map((item, idx) => ({ ...item, display_order: idx }))
+    setItems(updatedItems)
+    
+    setLoading(true)
+    const updates = updatedItems.map(item => ({ id: item.id, order: item.display_order }))
+    await bulkUpdateOrder('journey', updates)
+    setLoading(false)
+  }
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
@@ -128,10 +156,17 @@ export default function JourneyManager({ initialJourney }: { initialJourney: any
       )}
 
       <div className="space-y-4">
-        {initialJourney.length === 0 ? (
+        {items.length === 0 ? (
           <p className="text-gray-500 italic p-4 text-center">No journey entries found.</p>
-        ) : initialJourney.map((entry) => (
-          <div key={entry.id} className="p-6 border border-black/5 dark:border-white/10 rounded-2xl bg-[#FDFBF7] dark:bg-[#050505] flex flex-col md:flex-row gap-6 items-start md:items-center justify-between">
+        ) : items.map((entry, index) => (
+          <div key={entry.id} className="relative group p-6 border border-black/5 dark:border-white/10 rounded-2xl bg-[#FDFBF7] dark:bg-[#050505] flex flex-col md:flex-row gap-6 items-start md:items-center justify-between">
+            
+            {/* Reorder Buttons */}
+            <div className="absolute -left-3 top-1/2 -translate-y-1/2 flex flex-col gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+              <button onClick={() => handleMove(index, 'up')} disabled={index === 0 || loading} className="p-1 bg-white dark:bg-gray-800 rounded-full shadow border border-gray-200 dark:border-gray-700 hover:text-blue-500 disabled:opacity-30"><ArrowUp size={14}/></button>
+              <button onClick={() => handleMove(index, 'down')} disabled={index === items.length - 1 || loading} className="p-1 bg-white dark:bg-gray-800 rounded-full shadow border border-gray-200 dark:border-gray-700 hover:text-blue-500 disabled:opacity-30"><ArrowDown size={14}/></button>
+            </div>
+
             <div className="flex items-start gap-4">
               <div className="w-12 h-12 rounded-xl bg-gray-100 dark:bg-white/5 flex items-center justify-center shrink-0 border border-black/5 dark:border-white/10">
                 {entry.type === 'Experience' ? <Briefcase size={20} className="text-[#00F0FF]" /> : <GraduationCap size={20} className="text-[#7B61FF]" />}

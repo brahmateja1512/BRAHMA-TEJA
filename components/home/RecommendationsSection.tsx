@@ -11,7 +11,7 @@ export default function RecommendationsSection() {
   useEffect(() => {
     async function fetchData() {
       try {
-        const { data, error } = await supabase.from('recommendations').select('*').order('created_at', { ascending: false })
+        const { data, error } = await supabase.from('recommendations').select('*').order('display_order', { ascending: true })
         if (data && !error) setRecommendations(data)
       } catch (e) {
         console.warn("Failed to fetch recommendations")

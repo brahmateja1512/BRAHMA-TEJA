@@ -15,10 +15,10 @@ export default function ProjectsSection() {
   useEffect(() => {
     async function fetchData() {
       try {
-        const { data: projData } = await supabase.from('projects').select('*').order('created_at', { ascending: false }).limit(4)
+        const { data: projData } = await supabase.from('projects').select('*').order('display_order', { ascending: true }).limit(4)
         if (projData) setProjectsData(projData)
 
-        const { data: pubData } = await supabase.from('publications').select('*').order('created_at', { ascending: false }).limit(4)
+        const { data: pubData } = await supabase.from('publications').select('*').order('display_order', { ascending: true }).limit(4)
         if (pubData) setPublicationsData(pubData)
       } catch (e) {
         console.warn("Failed to fetch portfolio data")

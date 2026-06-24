@@ -25,7 +25,7 @@ export default function SkillsSection() {
   useEffect(() => {
     async function fetchSkills() {
       try {
-        const { data, error } = await supabase.from('skills').select('*').order('created_at', { ascending: true })
+        const { data, error } = await supabase.from('skills').select('*').order('display_order', { ascending: true })
         if (data && !error) setSkills(data)
       } catch (e) {
         console.warn('Failed to fetch skills')

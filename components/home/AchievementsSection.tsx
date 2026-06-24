@@ -18,7 +18,7 @@ export default function AchievementsSection() {
   useEffect(() => {
     async function fetchAchievements() {
       try {
-        const { data, error } = await supabase.from('achievements').select('*').order('created_at', { ascending: false })
+        const { data, error } = await supabase.from('achievements').select('*').order('display_order', { ascending: true })
         if (data && data.length > 0 && !error) {
           const formatted = data.map((ach: any) => {
             let Icon = Trophy

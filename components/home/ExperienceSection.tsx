@@ -14,7 +14,7 @@ export default function ExperienceSection() {
   useEffect(() => {
     async function fetchData() {
       try {
-        const { data, error } = await supabase.from('journey').select('*').order('created_at', { ascending: false })
+        const { data, error } = await supabase.from('journey').select('*').order('display_order', { ascending: true })
         if (data && !error) {
           setExperienceData(data.filter((d: any) => d.type === 'Experience'))
           setEducationData(data.filter((d: any) => d.type === 'Education'))
